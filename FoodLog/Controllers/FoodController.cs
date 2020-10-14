@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using FoodLog.Contexts;
 using FoodLog.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace FoodLog.Controllers
 {
@@ -13,23 +15,16 @@ namespace FoodLog.Controllers
         
         private readonly FoodContext _foodContext = new FoodContext();
 
-        // GET: api/Food
-        [HttpGet]
-        public Food Get()
-        {
-            return _foodContext.Foods.First();
-        }
-
-        // GET: api/Food/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST: api/Food
         [HttpPost]
-        public void Post([FromBody] Food food)
+        [Route("GetFood")]
+        public List<Food> GetFoodByName([FromBody] FoodRequest food)
+        {
+            return _foodContext.Foods.Where(x => x.Name.Contains(food.Name)).ToList();
+        }
+
+        [HttpPost]
+        [Route("CreateFood")]
+        public void CreateFood([FromBody] Food food)
         {
             _foodContext.Add(new Food
             {
@@ -42,16 +37,16 @@ namespace FoodLog.Controllers
             _foodContext.SaveChanges();
         }
 
-        // PUT: api/Food/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPost]
+        [Route("DeleteFood")]
+        public void Delete([FromBody] FoodRequest foodRequest)
         {
-        }
-
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            Food foodToDelete = _foodContext.Foods.Single(x => x.Id == foodRequest.Id);
+            if(foodToDelete != null)
+            {
+                _foodContext.Foods.Remove(foodToDelete);
+                _foodContext.SaveChanges();
+            }
         }
     }
 }

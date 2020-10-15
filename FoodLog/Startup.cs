@@ -30,9 +30,6 @@ namespace FoodLog
             services.AddEntityFrameworkSqlite().AddDbContext<FoodContext>();
             services.AddScoped<IFoodContext, FoodContext>();
             services.AddScoped<IFoodRepository, FoodRepository>();
-
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

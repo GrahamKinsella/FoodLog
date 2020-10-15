@@ -1,9 +1,7 @@
 ﻿using FoodLog.Contexts;
 using FoodLog.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace FoodLog.Repositories
 {
@@ -23,15 +21,7 @@ namespace FoodLog.Repositories
 
         public void CreateFood(Food food)
         {
-            _context.AddToContext(new Food
-            {
-                Name = food.Name,
-                Calories = food.Calories,
-                Carbohydrates = food.Carbohydrates,
-                Protein = food.Protein,
-                Fats = food.Fats
-            });
-
+            _context.AddToContext(food);
             _context.SaveChangesToContext();
         }
 

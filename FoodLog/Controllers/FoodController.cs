@@ -19,18 +19,27 @@ namespace FoodLog.Controllers
             _foodRepo = fr;
 
         }
-
+        //TODO: receive a list and then get each food in lists
         [HttpPost]
         [Route("GetFood")]
-        public List<Food> GetFoodByName([FromBody] FoodRequest food)
+        public List<Food> GetFoodByName([FromBody] FoodRequest foodRequest)
         {
-            return _foodRepo.GetFoods(food);
+            return _foodRepo.GetFoods(foodRequest);
         }
 
         [HttpPost]
         [Route("CreateFood")]
-        public void CreateFood([FromBody] Food food)
+        public void CreateFood([FromBody] FoodRequest foodRequest)
         {
+            var food = new Food
+            {
+                Name = foodRequest.Name,
+                Calories = foodRequest.Calories,
+                Carbohydrates = foodRequest.Carbohydrates,
+                Protein = foodRequest.Protein,
+                Fats = foodRequest.Fats
+            };
+            
             _foodRepo.CreateFood(food);
         }
 

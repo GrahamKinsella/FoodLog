@@ -21,34 +21,21 @@ namespace FoodLog.Controllers
         [Route("GetFood")]
         public List<Food> GetFoodByName([FromBody] FoodRequest food)
         {
-            return _foodContext.Foods.Where(x => x.Name.Contains(food.Name)).ToList();
+            return _foodContext.GetFoods(food);
         }
 
         [HttpPost]
         [Route("CreateFood")]
         public void CreateFood([FromBody] Food food)
         {
-            _foodContext.Add(new Food
-            {
-                Name = food.Name,
-                Calories = food.Calories,
-                Carbohydrates = food.Carbohydrates,
-                Protein = food.Protein,
-                Fats = food.Fats
-            });
-            _foodContext.SaveChanges();
+            _foodContext.CreateFood(food);
         }
 
         [HttpPost]
         [Route("DeleteFood")]
         public void Delete([FromBody] FoodRequest foodRequest)
         {
-            Food foodToDelete = _foodContext.Foods.Single(x => x.Id == foodRequest.Id);
-            if(foodToDelete != null)
-            {
-                _foodContext.Foods.Remove(foodToDelete);
-                _foodContext.SaveChanges();
-            }
+            _foodContext.Delete(foodRequest);
         }
     }
 }

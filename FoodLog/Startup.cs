@@ -28,8 +28,10 @@ namespace FoodLog
             services.AddControllers()
                 .AddNewtonsoftJson();
             services.AddEntityFrameworkSqlite().AddDbContext<FoodContext>();
-
+            services.AddScoped<IFoodContext, FoodContext>();
             services.AddScoped<IFoodRepository, FoodRepository>();
+
+
 
         }
 

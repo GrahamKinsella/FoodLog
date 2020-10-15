@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using FoodLog.Contexts;
 using FoodLog.Models;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace FoodLog.Controllers
 {
@@ -12,14 +10,12 @@ namespace FoodLog.Controllers
     [ApiController]
     public class FoodController : ControllerBase
     {
-
         private readonly FoodContext _foodContext;
 
         public FoodController(FoodContext fc)
         {
             _foodContext = fc;
         }
-
 
         [HttpPost]
         [Route("GetFood")]

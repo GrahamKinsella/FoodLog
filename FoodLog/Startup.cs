@@ -1,4 +1,5 @@
 using FoodLog.Contexts;
+using FoodLog.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +28,9 @@ namespace FoodLog
             services.AddControllers()
                 .AddNewtonsoftJson();
             services.AddEntityFrameworkSqlite().AddDbContext<FoodContext>();
+
+            services.AddScoped<IFoodRepository, FoodRepository>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

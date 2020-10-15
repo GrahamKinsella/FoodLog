@@ -2,6 +2,7 @@
 using System.Linq;
 using FoodLog.Contexts;
 using FoodLog.Models;
+using FoodLog.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoodLog.Controllers
@@ -10,32 +11,34 @@ namespace FoodLog.Controllers
     [ApiController]
     public class FoodController : ControllerBase
     {
-        private readonly FoodContext _foodContext;
+        private readonly IFoodRepository _foodRepo;
 
-        public FoodController(FoodContext fc)
+
+        public FoodController(IFoodRepository fr)
         {
-            _foodContext = fc;
+            _foodRepo = fr;
+
         }
 
         [HttpPost]
         [Route("GetFood")]
         public List<Food> GetFoodByName([FromBody] FoodRequest food)
         {
-            return _foodContext.GetFoods(food);
+            return _foodRepo.GetFoods(food);
         }
 
         [HttpPost]
         [Route("CreateFood")]
         public void CreateFood([FromBody] Food food)
         {
-            _foodContext.CreateFood(food);
+            _foodRepo.CreateFood(food);
         }
 
         [HttpPost]
         [Route("DeleteFood")]
         public void Delete([FromBody] FoodRequest foodRequest)
         {
-            _foodContext.Delete(foodRequest);
+            _foodRepo.Delete(foodRequest);
         }
     }
 }

@@ -12,8 +12,14 @@ namespace FoodLog.Controllers
     [ApiController]
     public class FoodController : ControllerBase
     {
-        
-        private readonly FoodContext _foodContext = new FoodContext();
+
+        private readonly FoodContext _foodContext;
+
+        public FoodController(FoodContext fc)
+        {
+            _foodContext = fc;
+        }
+
 
         [HttpPost]
         [Route("GetFood")]

@@ -9,8 +9,9 @@ namespace FoodLog.Contexts
     {
         public DbSet<Food> Foods { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlite("Data Source=FoodLog.db");
+        public FoodContext(DbContextOptions<FoodContext> options)
+             : base(options)
+        { }
 
 
         public void SaveChangesToContext()

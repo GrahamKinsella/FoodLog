@@ -11,7 +11,9 @@ namespace FoodLog.Contexts
 
         public FoodContext(DbContextOptions<FoodContext> options)
              : base(options)
-        { }
+        {
+            Database.EnsureCreated();
+        }
 
 
         public void SaveChangesToContext()
@@ -22,6 +24,11 @@ namespace FoodLog.Contexts
         public void AddToContext(Food food)
         {
             base.Add(food);
+        }
+
+        public override void Dispose()
+        {
+            Database.EnsureDeleted();
         }
     }
 }

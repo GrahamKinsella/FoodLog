@@ -20,8 +20,8 @@ namespace FoodLogTests
             {
                 var repo = new FoodRepository(context);
                 repo.CreateFood(new Food { Calories = 300, Carbohydrates = 34, Fats = 33, Name = "Chocolate", Protein = 5 });
-
                 Assert.Single(repo.GetFoods(new FoodRequest { Name = "Chocolate" }));
+                repo.Dispose();
             }
         }
     }

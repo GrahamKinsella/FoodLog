@@ -34,5 +34,10 @@ namespace FoodLog.Repositories
                 _context.SaveChangesToContext();
             }
         }
+
+        public void Dispose()
+        {
+            _context.Dispose();
+        }
     }
 }

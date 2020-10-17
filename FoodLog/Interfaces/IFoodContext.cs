@@ -11,6 +11,6 @@ namespace FoodLog.Contexts
 
         public void SaveChangesToContext();
         public void AddToContext(Food food);
-
+        void Dispose();
     }
 }

@@ -15,15 +15,6 @@ namespace FoodLog
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            //TODO: Move Db name to appsettings
-            var options = new DbContextOptionsBuilder<FoodContext>()
-                            .UseSqlite("Filename=Test.db")
-                            .Options;
-
-            using (var client = new FoodContext(options))
-            {
-                client.Database.EnsureCreated();
-            }
         }
 
 
@@ -32,7 +23,7 @@ namespace FoodLog
         {
             services.AddControllers()
                 .AddNewtonsoftJson();
-            services.AddEntityFrameworkSqlite().AddDbContext<FoodContext>();
+            services.AddEntityFrameworkSqlite().AddDbContext<FoodContext>(options => options.UseSqlite(Configuration["DbName"]));
             services.AddScoped<IFoodContext, FoodContext>();
             services.AddScoped<IFoodRepository, FoodRepository>();
         }

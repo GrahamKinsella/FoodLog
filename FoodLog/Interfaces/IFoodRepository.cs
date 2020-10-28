@@ -9,6 +9,6 @@ namespace FoodLog.Repositories
         void Delete(FoodRequest foodRequest);
         List<Food> GetFoods(FoodRequest food);
         List<Food> GetAllFoods();
-
+        void Update(FoodRequest foodRequest);
     }
 }

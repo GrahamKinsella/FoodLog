@@ -36,6 +36,11 @@ namespace FoodLog
                 app.UseDeveloperExceptionPage();
             }
 
+           //TODO: change this
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();

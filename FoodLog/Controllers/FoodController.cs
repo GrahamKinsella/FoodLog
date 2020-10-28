@@ -27,6 +27,20 @@ namespace FoodLog.Controllers
             return _foodRepo.GetFoods(foodRequest);
         }
 
+        [HttpGet]
+        [Route("GetAllFood")]
+        public List<Food> GetAllFoods()
+        {
+            return _foodRepo.GetAllFoods();
+        }
+
+        [HttpPut]
+        [Route("UpdateFood")]
+        public void UpdateFood([FromBody] FoodRequest foodRequest)
+        {
+            _foodRepo.Update(foodRequest);
+        }
+
         [HttpPost]
         [Route("CreateFood")]
         public void CreateFood([FromBody] FoodRequest foodRequest)

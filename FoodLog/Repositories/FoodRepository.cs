@@ -40,6 +40,23 @@ namespace FoodLog.Repositories
             }
         }
 
+        public void Update(FoodRequest foodRequest)
+        {
+            Food foodToUpdate = _context.Foods.Single(x => x.Id == foodRequest.Id);
+            if (foodToUpdate != null)
+            {
+                //TODO: Better way to do this using linq?
+                foodToUpdate.Name = foodRequest.Name;
+                foodToUpdate.Calories = foodRequest.Calories;
+                foodToUpdate.Carbohydrates = foodRequest.Carbohydrates;
+                foodToUpdate.Protein = foodRequest.Protein;
+                foodToUpdate.Fats = foodRequest.Fats;
+
+                _context.Foods.Update(foodToUpdate);
+                _context.SaveChangesToContext();
+            }
+        }
+
         public void Dispose()
         {
             _context.Dispose();

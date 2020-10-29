@@ -19,9 +19,14 @@ namespace FoodLog.Repositories
             return _context.Foods.ToList();
         }
 
-        public List<Food> GetFoods(FoodRequest food)
+        public List<Food> GetFoodByName(FoodRequest food)
         {
             return _context.Foods.Where(x => x.Name.Contains(food.Name)).ToList();
+        }
+
+        public Food GetFoodById(int id)
+        {
+            return _context.Foods.Single(x => x.Id == id);
         }
 
         public void CreateFood(Food food)

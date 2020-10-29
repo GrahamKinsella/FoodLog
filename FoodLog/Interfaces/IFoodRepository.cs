@@ -7,7 +7,10 @@ namespace FoodLog.Repositories
     {
         void CreateFood(Food food);
         void Delete(FoodRequest foodRequest);
-        List<Food> GetFoods(FoodRequest food);
+        List<Food> GetFoodByName(FoodRequest food);
+        Food GetFoodById(int id);
+
+
         List<Food> GetAllFoods();
         void Update(FoodRequest foodRequest);
     }

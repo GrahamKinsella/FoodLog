@@ -21,10 +21,17 @@ namespace FoodLog.Controllers
         }
         //TODO: receive a list and then get each food in lists
         [HttpPost]
-        [Route("GetFood")]
+        [Route("GetFoodByName")]
         public List<Food> GetFoodByName([FromBody] FoodRequest foodRequest)
         {
-            return _foodRepo.GetFoods(foodRequest);
+            return _foodRepo.GetFoodByName(foodRequest);
+        }
+
+        [HttpPost]
+        [Route("GetFoodById")]
+        public Food GetFoodById([FromBody] int id)
+        {
+            return _foodRepo.GetFoodById(id);
         }
 
         [HttpGet]

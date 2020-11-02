@@ -7,19 +7,15 @@ using System.Threading.Tasks;
 namespace FoodLog.Models
 {
     [FirestoreData]
-    public class Food
+    public class Meal
     {
         public int Id { get; set; }
         [FirestoreProperty]
+        public string date { get; set; }
+        [FirestoreProperty]
         public string Name { get; set; }
         [FirestoreProperty]
-        public int Calories { get; set; }
-        [FirestoreProperty]
-        public int Carbohydrates { get; set; }
-        [FirestoreProperty]
-        public int Protein { get; set; }
-        [FirestoreProperty]
-        public int Fats { get; set; }
+        public List<Food> Foods { get; set; }
 
     }
 }

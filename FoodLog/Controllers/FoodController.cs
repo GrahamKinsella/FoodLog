@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using FoodLog.Contexts;
+﻿using System;
+using System.Collections.Generic;
+using BlazorWithFirestore.Server.DataAccess;
+using FoodLog.Interfaces;
 using FoodLog.Models;
-using FoodLog.Repositories;
+using Google.Cloud.Firestore;
+using Google.Type;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoodLog.Controllers
@@ -11,64 +13,54 @@ namespace FoodLog.Controllers
     [ApiController]
     public class FoodController : ControllerBase
     {
-        private readonly IFoodRepository _foodRepo;
+        private IFoodDataAccessLayer _fdl;
+        private IMealDataAccessLayer _mdl;
 
-
-        public FoodController(IFoodRepository fr)
+        public FoodController(IFoodDataAccessLayer fdl, IMealDataAccessLayer mdl)
         {
-            _foodRepo = fr;
-
+            _fdl = fdl;
+            _mdl = mdl;
         }
         //TODO: receive a list and then get each food in lists
         [HttpPost]
         [Route("GetFoodByName")]
         public List<Food> GetFoodByName([FromBody] FoodRequest foodRequest)
         {
-            return _foodRepo.GetFoodByName(foodRequest);
+            return new List<Food>();
         }
 
         [HttpPost]
         [Route("GetFoodById")]
         public Food GetFoodById([FromBody] int id)
         {
-            return _foodRepo.GetFoodById(id);
+            return new Food();
         }
 
         [HttpGet]
         [Route("GetAllFood")]
-        public List<Food> GetAllFoods()
+        public async System.Threading.Tasks.Task<List<Food>> GetAllFoodsAsync()
         {
-            return _foodRepo.GetAllFoods();
+            return new List<Food>();
         }
 
         [HttpPut]
         [Route("UpdateFood")]
         public void UpdateFood([FromBody] FoodRequest foodRequest)
         {
-            _foodRepo.Update(foodRequest);
         }
 
         [HttpPost]
         [Route("CreateFood")]
-        public void CreateFood([FromBody] FoodRequest foodRequest)
+        public void CreateFood([FromBody] Food food)
         {
-            var food = new Food
-            {
-                Name = foodRequest.Name,
-                Calories = foodRequest.Calories,
-                Carbohydrates = foodRequest.Carbohydrates,
-                Protein = foodRequest.Protein,
-                Fats = foodRequest.Fats
-            };
-            
-            _foodRepo.CreateFood(food);
+
+            _fdl.AddFood(food);
         }
 
         [HttpPost]
         [Route("DeleteFood")]
         public void Delete([FromBody] FoodRequest foodRequest)
         {
-            _foodRepo.Delete(foodRequest);
         }
     }
 }

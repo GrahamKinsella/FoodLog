@@ -1,11 +1,12 @@
-using FoodLog.Contexts;
-using FoodLog.Repositories;
+using BlazorWithFirestore.Server.DataAccess;
+using FoodLog.Interfaces;
+using Google.Cloud.Firestore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace FoodLog
 {
@@ -17,15 +18,23 @@ namespace FoodLog
             Configuration = configuration;
         }
 
+        public string GetFirestoreProjectId() =>
+        Configuration["FIRESTORE_PROJECT_ID"];
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //better way to do this
+            string filepath = "C:\\FirestoreAPIKey\\FoodLog-e2f9f940bc8a.json";
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", filepath);
+
             services.AddControllers()
                 .AddNewtonsoftJson();
-            services.AddEntityFrameworkSqlite().AddDbContext<FoodContext>(options => options.UseSqlite(Configuration["DbName"]));
-            services.AddScoped<IFoodContext, FoodContext>();
-            services.AddScoped<IFoodRepository, FoodRepository>();
+            services.AddSingleton<FirestoreDb>(provider =>
+             FirestoreDb.Create(GetFirestoreProjectId()));
+
+            services.AddScoped<IFoodDataAccessLayer, FoodDataAccessLayer>();
+            services.AddScoped<IMealDataAccessLayer, MealDataAccessLayer>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

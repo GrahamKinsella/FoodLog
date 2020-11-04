@@ -55,8 +55,11 @@ namespace BlazorWithFirestore.Server.DataAccess
                 throw;
             }
         }
-        public async void UpdateMeal(Meal Meal)
+        public async void UpdateMeal(List<Food> foods)
         {
+            //get meal where date = today 
+            //add foods to that meal 
+
             try
             {
                 DocumentReference empRef = _firestore.Collection("Meals").Document(Meal.Id.ToString());

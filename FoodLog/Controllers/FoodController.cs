@@ -53,7 +53,6 @@ namespace FoodLog.Controllers
         [Route("CreateFood")]
         public void CreateFood([FromBody] Food food)
         {
-
             _fdl.AddFood(food);
         }
 

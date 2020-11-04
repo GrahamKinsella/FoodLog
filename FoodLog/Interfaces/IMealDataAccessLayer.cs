@@ -13,6 +13,6 @@ namespace FoodLog.Interfaces
         Task<List<Meal>> GetAllMeals();
         Task<List<Food>> GetFoodData();
         Task<Meal> GetMealData(string id);
-        void UpdateMeal(Meal Meal);
+        void UpdateMeal(List<Food> foods);
     }
 }

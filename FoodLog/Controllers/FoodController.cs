@@ -38,7 +38,7 @@ namespace FoodLog.Controllers
 
         [HttpGet]
         [Route("GetAllFood")]
-        public async System.Threading.Tasks.Task<List<Food>> GetAllFoodsAsync()
+        public List<Food> GetAllFoodsAsync()
         {
             return new List<Food>();
         }

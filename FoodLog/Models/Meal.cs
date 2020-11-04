@@ -1,20 +1,14 @@
 ﻿using Google.Cloud.Firestore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FoodLog.Models
 {
     [FirestoreData]
-    public class Meal
+    public abstract class Meal : IMeal
     {
         public int Id { get; set; }
-        [FirestoreProperty]
         public string date { get; set; }
-        [FirestoreProperty]
         public string Name { get; set; }
-        [FirestoreProperty]
         public List<Food> Foods { get; set; }
 
     }

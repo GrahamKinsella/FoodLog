@@ -19,8 +19,13 @@ namespace BlazorWithFirestore.Server.DataAccess
         {
             try
             {
-                Query MealQuery = _firestore.Collection("Meals");
-                QuerySnapshot MealQuerySnapshot = await MealQuery.GetSnapshotAsync();
+                //will come from front end
+                string mealname = "breakfast";
+                string date = DateTime.Now.ToShortDateString();
+
+                CollectionReference MealRef = _firestore.Collection("Meals");
+                Query query = MealRef.WhereEqualTo("date", date).WhereEqualTo("mealname", mealname);
+                QuerySnapshot MealQuerySnapshot = await query.GetSnapshotAsync();
                 List<Meal> lstMeal = new List<Meal>();
 
                 foreach (DocumentSnapshot documentSnapshot in MealQuerySnapshot.Documents)
@@ -62,8 +67,22 @@ namespace BlazorWithFirestore.Server.DataAccess
 
             try
             {
-                DocumentReference empRef = _firestore.Collection("Meals").Document(Meal.Id.ToString());
-                await empRef.SetAsync(Meal, SetOptions.Overwrite);
+                //will come from front end
+                string mealname = "breakfast";
+                string date = DateTime.Now.ToShortDateString();
+
+                CollectionReference MealRef = _firestore.Collection("Meals");
+                Query query = MealRef.WhereEqualTo("date", date).WhereEqualTo("mealname", mealname);
+                QuerySnapshot MealQuerySnapshot = await query.GetSnapshotAsync();
+
+                DocumentReference Docref = MealQuerySnapshot.Documents.First().Reference;
+
+                Dictionary<string, object> meal = MealQuerySnapshot.Documents.First().ToDictionary();
+                string json = JsonConvert.SerializeObject(meal);
+                Meal retrievedMeal = JsonConvert.DeserializeObject<Meal>(json);
+                retrievedMeal.Foods = foods;
+
+                await Docref.SetAsync(retrievedMeal, SetOptions.Overwrite);
             }
             catch
             {
@@ -99,31 +118,6 @@ namespace BlazorWithFirestore.Server.DataAccess
             {
                 DocumentReference empRef = _firestore.Collection("Meals").Document(id);
                 await empRef.DeleteAsync();
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<List<Food>> GetFoodData()
-        {
-            try
-            {
-                Query citiesQuery = _firestore.Collection("cities");
-                QuerySnapshot citiesQuerySnapshot = await citiesQuery.GetSnapshotAsync();
-                List<Food> lstFoods = new List<Food>();
-
-                foreach (DocumentSnapshot documentSnapshot in citiesQuerySnapshot.Documents)
-                {
-                    if (documentSnapshot.Exists)
-                    {
-                        Dictionary<string, object> city = documentSnapshot.ToDictionary();
-                        string json = JsonConvert.SerializeObject(city);
-                        Food newFood = JsonConvert.DeserializeObject<Food>(json);
-                        lstFoods.Add(newFood);
-                    }
-                }
-                return lstFoods;
             }
             catch
             {

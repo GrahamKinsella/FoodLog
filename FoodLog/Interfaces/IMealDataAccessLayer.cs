@@ -11,7 +11,6 @@ namespace FoodLog.Interfaces
         void AddMeal(Meal Meal);
         void DeleteMeal(string id);
         Task<List<Meal>> GetAllMeals();
-        Task<List<Food>> GetFoodData();
         Task<Meal> GetMealData(string id);
         void UpdateMeal(List<Food> foods);
     }

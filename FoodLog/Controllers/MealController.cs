@@ -24,9 +24,9 @@ namespace FoodLog.Controllers
 
         [HttpPost]
         [Route("UpdateMeal")]
-        public void CreateFood([FromBody] List<Food> foods)
+        public void CreateFood([FromBody] Meal mealRequest)
         {
-            _mdl.UpdateMeal(foods);
+            _mdl.UpdateMeal(mealRequest);
         }
     }
 }

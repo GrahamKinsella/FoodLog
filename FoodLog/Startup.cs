@@ -30,7 +30,7 @@ namespace FoodLog
 
             services.AddControllers()
                 .AddNewtonsoftJson();
-            services.AddSingleton<FirestoreDb>(provider =>
+            services.AddSingleton(provider =>
              FirestoreDb.Create(GetFirestoreProjectId()));
 
             services.AddScoped<IFoodDataAccessLayer, FoodDataAccessLayer>();

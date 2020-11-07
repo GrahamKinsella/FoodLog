@@ -10,44 +10,12 @@ using Newtonsoft.Json;
 
 namespace BlazorWithFirestore.Server.DataAccess
 {
-    public class MealDataAccessLayer: BaseDataAccessLayer, IMealDataAccessLayer
+    public class MealDataAccessLayer : BaseDataAccessLayer, IMealDataAccessLayer
     {
         public MealDataAccessLayer(FirestoreDb firestore) : base(firestore)
         {
         }
-        public async Task<List<Meal>> GetAllMeals()
-        {
-            try
-            {
-                //will come from front end
-                string mealname = "breakfast";
-                string date = DateTime.Now.ToShortDateString();
 
-                CollectionReference MealRef = _firestore.Collection("Meals");
-                Query query = MealRef.WhereEqualTo("date", date).WhereEqualTo("mealname", mealname);
-                QuerySnapshot MealQuerySnapshot = await query.GetSnapshotAsync();
-                List<Meal> lstMeal = new List<Meal>();
-
-                foreach (DocumentSnapshot documentSnapshot in MealQuerySnapshot.Documents)
-                {
-                    if (documentSnapshot.Exists)
-                    {
-                        Dictionary<string, object> food = documentSnapshot.ToDictionary();
-                        string json = JsonConvert.SerializeObject(food);
-                        Meal newMeal = JsonConvert.DeserializeObject<Meal>(json);
-                        newMeal.Id = int.Parse(documentSnapshot.Id);
-                        lstMeal.Add(newMeal);
-                    }
-                }
-
-                List<Meal> sortedMealList = lstMeal.OrderBy(x => x.date).ToList();
-                return sortedMealList;
-            }
-            catch
-            {
-                throw;
-            }
-        }
         public async void AddMeal(Meal Meal)
         {
             try
@@ -60,69 +28,57 @@ namespace BlazorWithFirestore.Server.DataAccess
                 throw;
             }
         }
-        public async void UpdateMeal(List<Food> foods)
+
+        public void DeleteFoodFromMeal(Food food, string date, string mealName)
         {
-            //get meal where date = today 
-            //add foods to that meal 
-
-            try
-            {
-                //will come from front end
-                string mealname = "breakfast";
-                string date = DateTime.Now.ToShortDateString();
-
-                CollectionReference MealRef = _firestore.Collection("Meals");
-                Query query = MealRef.WhereEqualTo("date", date).WhereEqualTo("mealname", mealname);
-                QuerySnapshot MealQuerySnapshot = await query.GetSnapshotAsync();
-
-                DocumentReference Docref = MealQuerySnapshot.Documents.First().Reference;
-
-                Dictionary<string, object> meal = MealQuerySnapshot.Documents.First().ToDictionary();
-                string json = JsonConvert.SerializeObject(meal);
-                Meal retrievedMeal = JsonConvert.DeserializeObject<Meal>(json);
-                retrievedMeal.Foods = foods;
-
-                await Docref.SetAsync(retrievedMeal, SetOptions.Overwrite);
-            }
-            catch
-            {
-                throw;
-            }
+            throw new NotImplementedException();
         }
-        public async Task<Meal> GetMealData(string id)
+
+        public async void UpdateMeal(Meal mealRequest)
         {
             try
             {
-                DocumentReference docRef = _firestore.Collection("Meals").Document(id);
-                DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+                var retrievedMeal = GetMeal(mealRequest);
 
-                if (snapshot.Exists)
+                if (retrievedMeal != null)
                 {
-                    Meal emp = snapshot.ConvertTo<Meal>();
-                    emp.Id = int.Parse(snapshot.Id);
-                    return emp;
+                    QuerySnapshot MealQuerySnapshot = await GetSnapshot(mealRequest);
+                    DocumentReference Docref = MealQuerySnapshot.Documents.First().Reference;
+                    await Docref.SetAsync(retrievedMeal, SetOptions.Overwrite);
                 }
                 else
                 {
-                    return new Meal();
+                    AddMeal(mealRequest);
                 }
             }
-            catch
+            catch(Exception e)
             {
-                throw;
+                throw new Exception($"Update meal failed: Exception {e}");
             }
         }
-        public async void DeleteMeal(string id)
+
+        public async Task<Meal> GetMeal(Meal mealRequest)
         {
-            try
+            Meal retrievedMeal = null;
+            QuerySnapshot MealQuerySnapshot = await GetSnapshot(mealRequest);
+
+            if (MealQuerySnapshot.Documents.Count != 0)
             {
-                DocumentReference empRef = _firestore.Collection("Meals").Document(id);
-                await empRef.DeleteAsync();
+                //this should be get meal
+                Dictionary<string, object> meal = MealQuerySnapshot.Documents.First().ToDictionary();
+                string json = JsonConvert.SerializeObject(meal);
+                retrievedMeal = JsonConvert.DeserializeObject<Meal>(json);
+                return retrievedMeal;
             }
-            catch
-            {
-                throw;
-            }
+
+            return retrievedMeal;
+        }
+
+        private async Task<QuerySnapshot> GetSnapshot(Meal mealRequest)
+        {
+            Query query = _firestore.Collection("Meals").WhereEqualTo("Date", mealRequest.Date).WhereEqualTo("Name", mealRequest.Name);
+            QuerySnapshot MealQuerySnapshot = await query.GetSnapshotAsync();
+            return MealQuerySnapshot;
         }
     }
 }

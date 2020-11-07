@@ -11,7 +11,7 @@ namespace FoodLog.Models
     {
         public int Id { get; set; }
         [FirestoreProperty]
-        public string date { get; set; }
+        public string Date { get; set; }
         [FirestoreProperty]
         public string Name { get; set; }
         [FirestoreProperty]

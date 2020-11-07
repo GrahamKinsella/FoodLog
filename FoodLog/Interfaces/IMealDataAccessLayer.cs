@@ -9,9 +9,7 @@ namespace FoodLog.Interfaces
     public interface IMealDataAccessLayer
     {
         void AddMeal(Meal Meal);
-        void DeleteMeal(string id);
-        Task<List<Meal>> GetAllMeals();
-        Task<Meal> GetMealData(string id);
-        void UpdateMeal(List<Food> foods);
+        void DeleteFoodFromMeal(Food food, string date, string mealName);
+        void UpdateMeal(Meal mealRequest);
     }
 }

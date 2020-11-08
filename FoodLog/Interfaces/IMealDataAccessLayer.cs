@@ -9,7 +9,6 @@ namespace FoodLog.Interfaces
     public interface IMealDataAccessLayer
     {
         void AddMeal(Meal Meal);
-        void DeleteFoodFromMeal(Food food, string date, string mealName);
         void UpdateMeal(Meal mealRequest);
     }
 }

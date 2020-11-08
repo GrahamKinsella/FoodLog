@@ -8,11 +8,10 @@ namespace FoodLog.Interfaces
 {
     public interface IFoodDataAccessLayer
     {
-        void AddFood(Food Food);
-        void DeleteFood(string id);
-        Task<List<Food>> GetAllFoods();
-        Task<Food> GetFoodData(string id);
-        Task<List<Food>> GetFoodData();
-        void UpdateFood(Food Food);
+        void AddFood(Food foodRequest);
+        void DeleteFood(Food foodRequest);
+        Task<List<Food>> GetAllFoods(Food foodRequest);
+        void UpdateFood(Food foodRequest);
+        Task<Food> GetFood(Food foodRequest);
     }
 }

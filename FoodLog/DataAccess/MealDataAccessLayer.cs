@@ -29,11 +29,6 @@ namespace BlazorWithFirestore.Server.DataAccess
             }
         }
 
-        public void DeleteFoodFromMeal(Food food, string date, string mealName)
-        {
-            throw new NotImplementedException();
-        }
-
         public async void UpdateMeal(Meal mealRequest)
         {
             try
@@ -51,7 +46,7 @@ namespace BlazorWithFirestore.Server.DataAccess
                     AddMeal(mealRequest);
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw new Exception($"Update meal failed: Exception {e}");
             }

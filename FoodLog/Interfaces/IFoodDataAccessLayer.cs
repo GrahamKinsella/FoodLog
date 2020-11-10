@@ -10,7 +10,7 @@ namespace FoodLog.Interfaces
     {
         void AddFood(Food foodRequest);
         void DeleteFood(Food foodRequest);
-        Task<List<Food>> GetAllFoods(Food foodRequest);
+        Task<List<Food>> GetFoodsMatchingName(Food foodRequest);
         void UpdateFood(Food foodRequest);
         Task<Food> GetFood(Food foodRequest);
     }

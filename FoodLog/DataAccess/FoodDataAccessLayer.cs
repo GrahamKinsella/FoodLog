@@ -28,36 +28,76 @@ namespace BlazorWithFirestore.Server.DataAccess
             throw new NotImplementedException();
         }
 
-        public async Task<List<Food>> GetAllFoods(Food foodRequest)
+        public async Task<List<Food>> GetFoodsMatchingName(Food foodRequest)
         {
-            throw new NotImplementedException();
+            List<Food> allFood = new List<Food>();
+            QuerySnapshot FoodQuerySnapshot = await GetSnapshotAllFood();
+            if (FoodQuerySnapshot.Documents.Count != 0)
+            {
+                foreach (var doc in FoodQuerySnapshot.Documents)
+                {
+                    allFood.Add(SerializeFood(doc));
+                }
+                return allFood.Where(f => f.Name.ToLower().Contains(foodRequest.Name.ToLower())).ToList();
+            }
+            return allFood;
         }
 
         public async Task<Food> GetFood(Food foodRequest)
         {
             Food retrievedFood = null;
-            QuerySnapshot FoodQuerySnapshot = await GetSnapshot(foodRequest);
+            QuerySnapshot FoodQuerySnapshot = await GetSnapshotByName(foodRequest);
 
             if (FoodQuerySnapshot.Documents.Count != 0)
             {
-                //this should be get meal
-                Dictionary<string, object> food = FoodQuerySnapshot.Documents.First().ToDictionary();
-                string json = JsonConvert.SerializeObject(food);
-                retrievedFood = JsonConvert.DeserializeObject<Food>(json);
+                var doc = FoodQuerySnapshot.Documents.First();
+                retrievedFood = SerializeFood(doc);
                 return retrievedFood;
             }
 
             return retrievedFood;
         }
 
-        public void UpdateFood(Food Food)
+        public Food SerializeFood(DocumentSnapshot doc)
         {
-            throw new NotImplementedException();
+            Dictionary<string, object> food = doc.ToDictionary();
+            string json = JsonConvert.SerializeObject(food);
+            return JsonConvert.DeserializeObject<Food>(json);
         }
 
-        private async Task<QuerySnapshot> GetSnapshot(Food foodRequest)
+        public async void UpdateFood(Food foodRequest)
+        {
+            try
+            {
+                var retrievedFood = GetFood(foodRequest);
+
+                if (retrievedFood != null)
+                {
+                    QuerySnapshot FoodQuerySnapshot = await GetSnapshotByName(foodRequest);
+                    DocumentReference Docref = FoodQuerySnapshot.Documents.First().Reference;
+                    await Docref.SetAsync(foodRequest, SetOptions.Overwrite);
+                }
+                else
+                {
+                    AddFood(foodRequest);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Update food failed: Exception {e}");
+            }
+        }
+
+        private async Task<QuerySnapshot> GetSnapshotByName(Food foodRequest)
         {
             Query query = _firestore.Collection(CollectionName).WhereEqualTo("Name", foodRequest.Name);
+            QuerySnapshot FoodQuerySnapshot = await query.GetSnapshotAsync();
+            return FoodQuerySnapshot;
+        }
+
+        private async Task<QuerySnapshot> GetSnapshotAllFood()
+        {
+            Query query = _firestore.Collection(CollectionName);
             QuerySnapshot FoodQuerySnapshot = await query.GetSnapshotAsync();
             return FoodQuerySnapshot;
         }

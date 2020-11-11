@@ -13,12 +13,10 @@ namespace FoodLog.Controllers
     [ApiController]
     public class MealController : ControllerBase
     {
-        private IFoodDataAccessLayer _fdl;
         private IMealDataAccessLayer _mdl;
 
-        public MealController(IFoodDataAccessLayer fdl, IMealDataAccessLayer mdl)
+        public MealController(IMealDataAccessLayer mdl)
         {
-            _fdl = fdl;
             _mdl = mdl;
         }
 

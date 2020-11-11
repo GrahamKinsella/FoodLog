@@ -18,12 +18,20 @@ namespace BlazorWithFirestore.Server.DataAccess
         {
         }
 
-        public void AddFood(Food Food)
+        public async void AddFood(Food foodRequest)
         {
-            throw new NotImplementedException();
+            try
+            {
+                CollectionReference colRef = _firestore.Collection(CollectionName);
+                await colRef.AddAsync(foodRequest);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
-        public void DeleteFood(Food Food)
+        public void DeleteFood(Food foodRequest)
         {
             throw new NotImplementedException();
         }

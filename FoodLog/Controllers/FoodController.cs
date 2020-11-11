@@ -14,45 +14,47 @@ namespace FoodLog.Controllers
     public class FoodController : ControllerBase
     {
         private IFoodDataAccessLayer _fdl;
-        private IMealDataAccessLayer _mdl;
 
-        public FoodController(IFoodDataAccessLayer fdl, IMealDataAccessLayer mdl)
+        public FoodController(IFoodDataAccessLayer fdl)
         {
             _fdl = fdl;
-            _mdl = mdl;
         }
         //TODO: receive a list and then get each food in lists
         [HttpPost]
-        [Route("GetFoodByName")]
-        public List<Food> GetFoodByName([FromBody] FoodRequest foodRequest)
+        [Route("GetListOfFoodsByName")]
+        public List<Food> GetListOfFoodsByName([FromBody] Food foodRequest)
         {
-            return new List<Food>();
+            return _fdl.GetFoodsMatchingName(foodRequest).Result;
+           
         }
 
         [HttpPost]
-        [Route("GetFoodById")]
-        public Food GetFoodById([FromBody] int id)
+        [Route("GetFood")]
+        public Food GetFood([FromBody] Food foodRequest)
         {
-            return new Food();
+            return _fdl.GetFood(foodRequest).Result;
         }
 
         [HttpGet]
-        [Route("GetAllFood")]
-        public async System.Threading.Tasks.Task<List<Food>> GetAllFoodsAsync()
+        [Route("RecentlyAddedFood")]
+        public List<Food> GetRecentFoods()
         {
+            //get food by date
             return new List<Food>();
         }
 
         [HttpPut]
         [Route("UpdateFood")]
-        public void UpdateFood([FromBody] FoodRequest foodRequest)
+        public void UpdateFood([FromBody] Food foodRequest)
         {
+            _fdl.UpdateFood(foodRequest);
         }
 
         [HttpPost]
         [Route("CreateFood")]
         public void CreateFood([FromBody] Food food)
         {
+            //implement
             _fdl.AddFood(food);
         }
 
@@ -60,6 +62,8 @@ namespace FoodLog.Controllers
         [Route("DeleteFood")]
         public void Delete([FromBody] FoodRequest foodRequest)
         {
+            //implements
+
         }
     }
 }

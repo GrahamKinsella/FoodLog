@@ -12,6 +12,8 @@ namespace BlazorWithFirestore.Server.DataAccess
 {
     public class MealDataAccessLayer : BaseDataAccessLayer, IMealDataAccessLayer
     {
+        const string CollectionName = "Meals";
+
         public MealDataAccessLayer(FirestoreDb firestore) : base(firestore)
         {
         }
@@ -20,7 +22,7 @@ namespace BlazorWithFirestore.Server.DataAccess
         {
             try
             {
-                CollectionReference colRef = _firestore.Collection("Meals");
+                CollectionReference colRef = _firestore.Collection(CollectionName);
                 await colRef.AddAsync(Meal);
             }
             catch

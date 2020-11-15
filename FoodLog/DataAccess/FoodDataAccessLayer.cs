@@ -66,6 +66,23 @@ namespace BlazorWithFirestore.Server.DataAccess
             return retrievedFood;
         }
 
+        public async Task<List<Food>> GetRecentlyAddedFoods()
+        {
+            var today = DateTime.Now;
+            List<Food> recentlyAddedFood = new List<Food>();
+            QuerySnapshot FoodQuerySnapshot = await GetSnapshotAllFood();
+
+            if (FoodQuerySnapshot.Documents.Count != 0)
+            {
+                foreach (var doc in FoodQuerySnapshot.Documents)
+                {
+                    recentlyAddedFood.Add(SerializeFood(doc));
+                }
+                return recentlyAddedFood.Where(f => (Convert.ToDateTime(f.DateAdded) - today).TotalDays < 7).OrderByDescending(x => x.DateAdded).ToList();
+            }
+            return recentlyAddedFood;
+        }
+
         public Food SerializeFood(DocumentSnapshot doc)
         {
             Dictionary<string, object> food = doc.ToDictionary();
@@ -84,10 +101,6 @@ namespace BlazorWithFirestore.Server.DataAccess
                     QuerySnapshot FoodQuerySnapshot = await GetSnapshotByName(foodRequest);
                     DocumentReference Docref = FoodQuerySnapshot.Documents.First().Reference;
                     await Docref.SetAsync(foodRequest, SetOptions.Overwrite);
-                }
-                else
-                {
-                    AddFood(foodRequest);
                 }
             }
             catch (Exception e)

@@ -13,5 +13,6 @@ namespace FoodLog.Interfaces
         Task<List<Food>> GetFoodsMatchingName(Food foodRequest);
         void UpdateFood(Food foodRequest);
         Task<Food> GetFood(Food foodRequest);
+        Task<List<Food>> GetRecentlyAddedFoods();
     }
 }

@@ -40,7 +40,7 @@ namespace FoodLog.Controllers
         public List<Food> GetRecentFoods()
         {
             //get food by date
-            return new List<Food>();
+            return _fdl.GetRecentlyAddedFoods().Result;
         }
 
         [HttpPut]

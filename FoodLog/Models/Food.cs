@@ -9,7 +9,6 @@ namespace FoodLog.Models
     [FirestoreData]
     public class Food
     {
-        public int Id { get; set; }
         [FirestoreProperty]
         public string Name { get; set; }
         [FirestoreProperty]
@@ -20,6 +19,8 @@ namespace FoodLog.Models
         public int Protein { get; set; }
         [FirestoreProperty]
         public int Fats { get; set; }
+        [FirestoreProperty]
+        public string DateAdded { get; set; }
 
     }
 }
